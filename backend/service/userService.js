@@ -11,11 +11,11 @@ const uuid = require("uuid");
 class userService{
 
     async registration(email, password, phoneNumber, fullName){
-            const candidate = await UserModel.findOne({ email });
-            // ... rest of your code
-            if(candidate){
-                throw new Error("User with such email already exist");
-            }
+        const candidate = await UserModel.findOne({ email });
+        
+        if(candidate){
+            throw new Error("User with such email already exist");
+        }
 
 
         const passwordHash = await bcrypt.hash(password, 10);
@@ -23,7 +23,7 @@ class userService{
 
         const user = await UserModel.create({fullName, email, password:passwordHash, phoneNumber, activationLink});
 
-        await mailService.sendActivationLink(email, activationLink);
+        await mailService.sendActivationLink(email, `${process.env.API_URL}/api/activate/${activationLink}`);
 
         const userDTO = new UserDTO(user);
         const tokens = tokenService.generateTokens({...userDTO});
@@ -32,6 +32,18 @@ class userService{
 
         return{...tokens, user: userDTO};
 
+
+    }
+
+    async activate(activationLink){
+
+        const user = await UserModel.findOne({activationLink});
+        if(!user){
+            throw new Error("неправильне посилання для активації");
+        }
+
+        user.isActivated = true;
+        user.save();
 
     }
 
