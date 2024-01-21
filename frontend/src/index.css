@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css?family=Comfortaa');
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Comfortaa', "Calibri";
+}
+
+:root{
+  --color-main-black: #11101c;
+  --color-main-blue:#2126a1;
+  --color-main-white:#edeff7;
+  --border-blue: 2px var(--color-main-blue) solid;
+}
+body {
+  overflow: hidden;
+  background-color: var(--color-main-white);
+
+}
+
+

@@ -1,0 +1,158 @@
+.mainList{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style-type: none;
+    gap: 20px;
+}
+
+.header {
+    position: relative;
+    padding: 10px;
+    margin: 0 auto;
+
+
+}
+
+.header::before {
+    content: "";
+    /* Вміст обов'язково порожній для ::before */
+    background-image: url("../../../public/teeth.svg");
+    background-size: cover;
+    position: absolute;
+    left: 20;
+    top: 10;
+    z-index: -1;
+    pointer-events: none;
+    transform: translate(-65px, -50px);
+    width: 1500px;
+    height: 140px;
+}
+
+
+.mainList li a {
+    text-decoration: none;
+    padding: 7px 20px;
+    font-size: 20px;
+    border: 2px var(--color-main-blue) solid;
+    border-radius: 100px;
+    font-weight: 100;
+    color: var(--color-main-blue);
+
+}
+
+.mainList li:hover {
+    transform: scale(1.1);
+}
+
+.mainList li {
+
+    transition: transform 0.3s ease-in-out;
+}
+
+a {
+    text-decoration: none;
+}
+
+
+
+.header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 100px;
+
+}
+
+.logoLink {
+    height: 40px;
+    width: 50px;
+}
+
+.bookBtn {
+    font-size: 20px;
+    color: var(--color-main-white);
+    background-color: var(--color-main-blue);
+    padding: 7px 20px;
+
+
+    border: var(--border-blue);
+}
+
+.hamburgerIcon {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    margin: 5px;
+    cursor: pointer;
+}
+
+@media (max-width: 1000px) {
+    .hamburgerIcon {
+        display: flex;
+    }
+
+    .header nav ul.mainList,
+    .bookBtn {
+        display: none;
+    }
+
+    .header nav {
+        padding: 0px 50px;
+    }
+
+    .openedMenu {
+        display: flex; 
+    }
+}
+
+@media (min-width: 1000px) {
+    .openedMenu {
+        display: none;
+    }
+}
+
+.openedMenu {
+    list-style-type: none;
+    
+    font-size: 20px;
+    min-width: 150px;
+    padding: 20px;
+    border-radius: 10px;
+    position: absolute;
+    right: 5%;
+    top: 100px;
+    flex-direction: column;
+    background-color: var(--color-main-blue);
+}
+
+
+.openedMenu li:not(:last-child) {
+    margin-bottom: 10px;
+
+}
+
+.openedMenu *{
+    width: 100%;
+    text-align: center;
+    color: var(--color-main-white);
+}
+
+.bar {
+
+    width: 100%;
+    height: 4px;
+    border-radius: 2px;
+    background-color: var(--color-main-blue);
+}
+
+.hamburgerIcon .bar:first-child {
+    transform: translateY(-7px);
+}
+
+.hamburgerIcon .bar:last-child {
+    transform: translateY(7px);
+}
