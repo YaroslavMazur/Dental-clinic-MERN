@@ -6,6 +6,7 @@ const UserDTO = require("../dtos/userDTO");
 const bcrypt = require("bcrypt");
 const uuid = require("uuid");
 const ApiErrors = require("../exceptions/apiErrors");
+const userModel = require("../models/userModel");
 
 
 
@@ -75,6 +76,34 @@ class userService{
     async logout(refreshToken){
         const token = await tokenService.removeToken(refreshToken);
         return token;
+    }
+
+    async refresh(refreshToken){
+        if(!refreshToken){
+            throw ApiErrors.UnauthorizedError();
+        }
+
+        const userData = tokenService.verifyRefreshToken();
+        const tokenFromDB = tokenService.findToken(refreshToken);
+
+        if(!userData || !tokenFromDB){
+            throw ApiErrors.UnauthorizedError();
+        }
+
+        const user = await userModel.findById(userData.id);
+        const userDTO = new UserDTO(user);
+        const tokens = tokenService.generateTokens({...userDTO});
+
+        await tokenService.saveToken(userDTO.id, tokens.refreshToken);
+
+        return{...tokens, user: userDTO};
+
+
+    }
+
+    async getAllUsers(){
+        const users = await userModel.find({}, {password:0});
+        return users;
     }
 
 }
