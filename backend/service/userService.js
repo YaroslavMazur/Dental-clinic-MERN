@@ -5,6 +5,7 @@ const UserDTO = require("../dtos/userDTO");
 
 const bcrypt = require("bcrypt");
 const uuid = require("uuid");
+const ApiErrors = require("../exceptions/apiErrors");
 
 
 
@@ -14,7 +15,7 @@ class userService{
         const candidate = await UserModel.findOne({ email });
         
         if(candidate){
-            throw new Error("User with such email already exist");
+            throw ApiErrors.BadRequest("User with such email already exist");
         }
 
 
@@ -23,7 +24,7 @@ class userService{
 
         const user = await UserModel.create({fullName, email, password:passwordHash, phoneNumber, activationLink});
 
-        await mailService.sendActivationLink(email, `${process.env.API_URL}/api/activate/${activationLink}`);
+        // await mailService.sendActivationLink(email, `${process.env.API_URL}/api/activate/${activationLink}`);
 
         const userDTO = new UserDTO(user);
         const tokens = tokenService.generateTokens({...userDTO});
@@ -45,6 +46,35 @@ class userService{
         user.isActivated = true;
         user.save();
 
+    }
+
+    async login(email, password){
+        const user = await UserModel.findOne({email});
+        if(!user){
+            throw ApiErrors.BadRequest("користувача з таким email не знайдено");
+        }
+
+        const isRightPassword = bcrypt.compare(password, user.password);
+
+        if(!isRightPassword){
+            throw ApiErrors.BadRequest("Неправильний email або пароль")
+        }
+
+        const userDTO = new UserDTO(user);
+        const tokens = tokenService.generateTokens({...userDTO});
+
+        await tokenService.saveToken(userDTO.id, tokens.refreshToken);
+
+        return{...tokens, user: userDTO};
+
+
+
+
+    }
+
+    async logout(refreshToken){
+        const token = await tokenService.removeToken(refreshToken);
+        return token;
     }
 
 }
