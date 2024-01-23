@@ -5,18 +5,23 @@ const router = new Router();
 
 const UserController = require("../controllers/userController");
 const authMiddlware = require("../middlwares/authMiddlware");
+const authValidations = require("../validations/authValidator");
+const validationsHandlerMiddlware = require("../middlwares/validationsHandlerMiddlware");
 
 router.post("/registration",
-    body("email").isEmail(),
-    body("password").isLength({min:3, max: 32})
-
-    ,UserController.registration
+    authValidations.registerValidations,
+    validationsHandlerMiddlware, 
+    UserController.registration
 );
 
-router.post("/login", UserController.login);
+router.post("/login",
+    authValidations.loginValidations,
+    validationsHandlerMiddlware, 
+    UserController.login);
+    
 router.post("/logout",UserController.logout);
 router.get("/activate/:link",UserController.activate);
 router.get("/refresh",UserController.refresh);
-router.get("/users",authMiddlware, UserController.getUsers);
+router.get("/users", authMiddlware, UserController.getUsers);
 
 module.exports = router;

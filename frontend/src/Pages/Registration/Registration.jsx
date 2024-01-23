@@ -4,17 +4,28 @@ import css from "../Login/Login.module.css";
 import {Link} from 'react-router-dom';
 import PhoneInputWithCountry from 'react-phone-number-input/react-hook-form';
 import 'react-phone-number-input/style.css';
+import { useDispatch } from 'react-redux';
+import { registerUser } from '../../redux/slices/authSlice';
 
 
 export const Registration = () => {
-  const { register, handleSubmit,control, formState: { errors } } = useForm();
+
+  const dispatch = useDispatch();
+
+  const { register, handleSubmit, control, formState: { errors } } = useForm();
 
   const onSubmit = (data) => {
-    console.log('name:', data.name);
-    console.log('email:', data.email);
-    console.log('Number:', data.phoneNumber);
-    console.log('Password:', data.password);
+    // console.log('name:', data.name);
+    // console.log('email:', data.email);
+    // console.log('Number:', data.phoneNumber);
+    // console.log('Password:', data.password);
 
+    dispatch(registerUser({
+      email: data.email,
+      password: data.password,
+      phoneNumber: data.phoneNumber,
+      fullName: data.fullName,
+    }))
 
   };
 
