@@ -1,7 +1,7 @@
 import $api from "../http/index";
 
 export default class AuthService{
-    static async login(email, password){
+    static login(email, password){
         return $api.post("/login", {email, password});
     }
 
@@ -10,7 +10,7 @@ export default class AuthService{
     }    
 
     
-    static async logout(){
+    static logout(){
         return $api.post("/logout");
     } 
 }
