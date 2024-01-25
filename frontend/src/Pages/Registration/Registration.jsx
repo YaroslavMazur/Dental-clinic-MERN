@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm, setValue } from "react-hook-form";
 import css from "../Login/Login.module.css";
 import { Link, useNavigate } from "react-router-dom";
 import PhoneInputWithCountry from "react-phone-number-input/react-hook-form";
 import "react-phone-number-input/style.css";
-import { useDispatch } from "react-redux";
-import { registerUser } from "../../redux/slices/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  registerUser,
+  selectErrors,
+  selectIsAuth,
+} from "../../redux/slices/authSlice";
 
 export const Registration = () => {
   const dispatch = useDispatch();
@@ -20,14 +24,28 @@ export const Registration = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    dispatch(
-      registerUser({
-        email: data.email,
-        password: data.password,
-        phoneNumber: data.phoneNumber,
-        fullName: data.fullName,
-      })
-    );
+
+      const resultAction = await dispatch(
+
+        registerUser({
+          email: data.email,
+          password: data.password,
+          phoneNumber: data.phoneNumber,
+          fullName: data.fullName,
+        })
+      );
+      
+      const isValidated = !resultAction.payload?.errors;
+
+      if(!isValidated){
+        resultAction.payload.errors.forEach((err)=>{
+          setError(err.path, { type:"server validation", message:err.msg })
+        })
+      }
+      else{
+        navigate("/");
+      }
+      
   };
 
   return (
@@ -44,7 +62,7 @@ export const Registration = () => {
             {...register("fullName", { required: "*name is required" })}
           />
           {errors.fullName && (
-            <p className={css.error}>{errors.name.message}</p>
+            <p className={css.error}>{errors.fullName.message}</p>
           )}
         </div>
 
@@ -67,8 +85,7 @@ export const Registration = () => {
             name="phoneNumber" // Add name prop for registration
             defaultCountry="UA"
             control={control}
-            // {...register('phoneNumber', { required: 'Phone number is required' })}
-          />
+            rules={{ required: "*phone number is required" }}          />
           {errors.phoneNumber && (
             <p className={css.error}>{errors.phoneNumber.message}</p>
           )}
