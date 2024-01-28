@@ -14,10 +14,7 @@ router.post("/registration",
     UserController.registration
 );
 
-router.post("/login",
-    authValidations.loginValidations,
-    validationsHandlerMiddlware, 
-    UserController.login);
+router.post("/login", UserController.login);
     
 router.post("/logout",UserController.logout);
 router.get("/activate/:link",UserController.activate);

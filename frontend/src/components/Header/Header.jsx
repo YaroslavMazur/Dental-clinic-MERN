@@ -18,8 +18,8 @@ const Header = () => {
 				<Link to="/" className = {css.logoLink}></Link>
 
 				<ul className={css.mainList}>
-					<li><Link to="/">Profile</Link></li>
-					<li><Link to="/">About</Link></li>
+					<li><Link to="/profile">Profile</Link></li>
+					<li><Link to="/about">About</Link></li>
 					<li><Link to="/login">Log in</Link></li>
 					<li><Link to="/registration">Sign up</Link></li>
 				</ul>
@@ -34,8 +34,8 @@ const Header = () => {
 				
 				{isMenuOpened &&(
 					<ul className={css.openedMenu}>
-						<li><Link to="/">Profile</Link></li>
-						<li><Link to="/">About</Link></li>
+						<li><Link to="/profile">Profile</Link></li>
+						<li><Link to="/about">About</Link></li>
 						<li><Link to="/login">Sign in</Link></li>
 						<li><Link to="/register">Sign up</Link></li>
 					</ul>

@@ -16,7 +16,7 @@ class userService{
         const candidate = await UserModel.findOne({ email });
         
         if(candidate){
-            throw ApiErrors.BadRequest("User with such email already exist");
+            throw ApiErrors.BadRequest("Registration error", [{path:"email", msg:"user with such email already exist"}]);
         }
 
 
@@ -41,7 +41,7 @@ class userService{
 
         const user = await UserModel.findOne({activationLink});
         if(!user){
-            throw new Error("неправильне посилання для активації");
+            throw ApiErrors.BadRequest("Activation error", [{ path: "activationLink", msg: "Invalid activation link" }]);
         }
 
         user.isActivated = true;
@@ -51,14 +51,16 @@ class userService{
 
     async login(email, password){
         const user = await UserModel.findOne({email});
-        if(!user){
-            throw ApiErrors.BadRequest("користувача з таким email не знайдено");
-        }
 
-        const isRightPassword = bcrypt.compare(password, user.password);
+        if(!user){
+            throw ApiErrors.LoginError();
+        }
+        
+
+        const isRightPassword = await bcrypt.compare(password, user.password);
 
         if(!isRightPassword){
-            throw ApiErrors.BadRequest("Неправильний email або пароль")
+            throw ApiErrors.LoginError()
         }
 
         const userDTO = new UserDTO(user);
@@ -67,9 +69,6 @@ class userService{
         await tokenService.saveToken(userDTO.id, tokens.refreshToken);
 
         return{...tokens, user: userDTO};
-
-
-
 
     }
 
@@ -79,24 +78,30 @@ class userService{
     }
 
     async refresh(refreshToken){
-        if(!refreshToken){
-            throw ApiErrors.UnauthorizedError();
+        try{
+
+            if(!refreshToken){
+                throw ApiErrors.UnauthorizedError();
+            }
+    
+            const userData = tokenService.verifyRefreshToken(refreshToken);
+            const tokenFromDB = tokenService.findToken(refreshToken);
+    
+            if(!userData || !tokenFromDB){
+                throw ApiErrors.UnauthorizedError();
+            }
+    
+            const user = await userModel.findById(userData.id);
+            const userDTO = new UserDTO(user);
+            const tokens = tokenService.generateTokens({...userDTO});
+    
+            await tokenService.saveToken(userDTO.id, tokens.refreshToken);
+    
+            return{...tokens, user: userDTO};
         }
-
-        const userData = tokenService.verifyRefreshToken();
-        const tokenFromDB = tokenService.findToken(refreshToken);
-
-        if(!userData || !tokenFromDB){
-            throw ApiErrors.UnauthorizedError();
+        catch(err){
+            console.log("refresh err", err);
         }
-
-        const user = await userModel.findById(userData.id);
-        const userDTO = new UserDTO(user);
-        const tokens = tokenService.generateTokens({...userDTO});
-
-        await tokenService.saveToken(userDTO.id, tokens.refreshToken);
-
-        return{...tokens, user: userDTO};
 
 
     }

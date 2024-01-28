@@ -16,5 +16,13 @@ module.exports = class ApiErrors extends Error{
     static BadRequest(message, errors = []){
         return new ApiErrors(400, message, errors);
     }
+
+    static ValidationErrors(message, errors = []){
+        return new ApiErrors(422, message, errors);
+    }
+
+    static LoginError(){
+        return new ApiErrors(400, "Wrong email or password",[{path:"password", msg:"Wrong email or password"}]);
+    }
     
 }

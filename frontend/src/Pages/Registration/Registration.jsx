@@ -5,11 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import PhoneInputWithCountry from "react-phone-number-input/react-hook-form";
 import "react-phone-number-input/style.css";
 import { useDispatch, useSelector } from "react-redux";
-import {
-  registerUser,
-  selectErrors,
-  selectIsAuth,
-} from "../../redux/slices/authSlice";
+import { registerUser, selectIsAuth } from "../../redux/slices/authSlice";
 
 export const Registration = () => {
   const dispatch = useDispatch();
@@ -24,28 +20,21 @@ export const Registration = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
+    const resultAction = await dispatch(registerUser(data));
 
-      const resultAction = await dispatch(
+    const isValidated = !resultAction.payload?.errors;
+    console.log(isValidated);
 
-        registerUser({
-          email: data.email,
-          password: data.password,
-          phoneNumber: data.phoneNumber,
-          fullName: data.fullName,
-        })
-      );
-      
-      const isValidated = !resultAction.payload?.errors;
+    if (!isValidated) {
+      resultAction.payload.errors.forEach((err) => {
+        setError(err.path, { type: "server validation", message: err.msg });
+      });
+    }
 
-      if(!isValidated){
-        resultAction.payload.errors.forEach((err)=>{
-          setError(err.path, { type:"server validation", message:err.msg })
-        })
-      }
-      else{
-        navigate("/");
-      }
-      
+    else{
+      navigate("/");
+    }
+    
   };
 
   return (
@@ -81,11 +70,12 @@ export const Registration = () => {
           <label htmlFor="phoneNumber">Phone number</label>
 
           <PhoneInputWithCountry
-            id="phoneNumber" // Add an id for accessibility
-            name="phoneNumber" // Add name prop for registration
+            id="phoneNumber"
+            name="phoneNumber"
             defaultCountry="UA"
             control={control}
-            rules={{ required: "*phone number is required" }}          />
+            rules={{ required: "*phone number is required" }}
+          />
           {errors.phoneNumber && (
             <p className={css.error}>{errors.phoneNumber.message}</p>
           )}

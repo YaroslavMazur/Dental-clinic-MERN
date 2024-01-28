@@ -1,15 +1,33 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import css from "./Login.module.css";
-import {Link} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { loginUser } from '../../redux/slices/authSlice';
 
 const Login = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { register, handleSubmit, setError, formState: { errors } } = useForm();
 
-  const onSubmit = (data) => {
-    // Ваша логіка обробки логіну тут, наприклад, виклик API для перевірки логіну та паролю
-    console.log('Email:', data.email);
-    console.log('Password:', data.password);
+  const onSubmit = async (data) => {
+
+    const response = await dispatch(loginUser(data));
+    console.log("login resp", response);
+
+    const isValidated = !response.payload?.errors;
+    console.log(isValidated);
+
+    if (!isValidated) {
+      response.payload.errors.forEach((err) => {
+        setError(err.path, { type: "manual", message: err.msg });
+      });
+
+    }
+    else{
+      navigate("/");
+    }
+
   };
 
   return (

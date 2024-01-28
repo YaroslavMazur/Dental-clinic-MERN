@@ -8,12 +8,6 @@ class userController{
     async registration(req, res, next){
         try{
 
-            const errors = validationResult(req);
-
-            if(!errors.isEmpty()){
-                return next(ApiErrors.BadRequest("Помилка при реєстрації", errors));
-            }
-
             const {fullName, email, password, phoneNumber} = req.body;
 
             const userData = await userService.registration(email, password, phoneNumber, fullName);
@@ -79,7 +73,7 @@ class userController{
     async refresh(req, res, next){
         try{
 
-            const {refreshToken} = req.cookies();
+            const {refreshToken} = req.cookies;
             const userData = await userService.refresh(refreshToken);
 
             res.cookie("refreshToken", userData.refreshToken, {maxAge: 30*24*60*60*1000, httpOnly:true});
