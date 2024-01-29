@@ -11,6 +11,7 @@
   --color-main-black: #11101c;
   --color-main-blue:#2126a1;
   --color-main-white:#edeff7;
+  --color-warning-orange: #ff8c1a;
   --border-blue: 2px var(--color-main-blue) solid;
 }
 body {

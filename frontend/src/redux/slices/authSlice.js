@@ -137,6 +137,13 @@ const authSlice = createSlice({
 
 })
 export const selectIsAuth = (state) => Boolean(state.auth.isAuth);
+export const selectIsMailActivated = (state) => {
+    const userData = state.auth.userData;
+    if(!userData) return false;
+
+    return userData.user.isActivated;
+}
+
 export const selectUserData = (state) => state.auth.userData;
 
 

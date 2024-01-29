@@ -1,0 +1,12 @@
+.warnContainer{
+    width: 100%;
+    padding: 3px 0px;
+    text-align: center;
+    background-color: var(--color-warning-orange);
+}
+
+.warnText{
+    color: white;
+    text-decoration: none;
+    font-size: 15px;
+}

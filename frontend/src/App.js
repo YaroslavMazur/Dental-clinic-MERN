@@ -6,11 +6,14 @@ import Login from "./Pages/Login/Login.jsx";
 import {Registration} from './Pages/Registration/Registration.jsx';
 import { Profile } from './Pages/Profile/Profile.jsx';
 import { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { checkAuth } from './redux/slices/authSlice.js';
+import { useDispatch, useSelector } from 'react-redux';
+import { checkAuth, selectIsAuth , selectIsMailActivated} from './redux/slices/authSlice.js';
+import { Warning } from './components/Warning/Warning.jsx';
 
 function App() {
   const dispatch = useDispatch();
+  const isAuth = useSelector(selectIsAuth);
+  const isMailActivated = useSelector(selectIsMailActivated);
 
   const checkAuthentication = async () => {
     try {
@@ -28,6 +31,12 @@ function App() {
 
   return (
     <div className="App">
+      {isAuth && !isMailActivated ?
+  
+      <Warning 
+        msg="Please activate your email"
+        link="/profile" /> :"" }
+
       <Header/>
       <Routes>
         <Route path="/" element={<Main/>}/>
