@@ -21,7 +21,11 @@ const UserSchema = new Schema({
 
     phoneNumber:{
         type:String,
-        required:true,
+        default:null,
+    },
+    role:{
+        type:String,
+        default:"user",
     },
     
     isActivated:{
@@ -31,8 +35,9 @@ const UserSchema = new Schema({
     activationLink:{
         type:String,
     }
+    
 
-})
+},{timestamps:true})
 
 
 module.exports = model("User", UserSchema);

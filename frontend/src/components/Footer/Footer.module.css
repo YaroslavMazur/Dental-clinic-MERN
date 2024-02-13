@@ -1,0 +1,16 @@
+.footerContainer{
+    width: 100%;
+    background-color: var(--color-main-blue);
+    color: var(--color-main-white);
+    display: flex;
+    justify-content: space-around;
+}
+
+.column{
+    min-height: 100px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0px
+
+}
+

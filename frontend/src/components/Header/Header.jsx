@@ -5,9 +5,15 @@ import {Link} from "react-router-dom";
 
 const Header = () => {
 	const [isMenuOpened, setIsMenuOpen] = useState(false);
+	// const [burgerStyle, setBurgerStyle] = useState("");
 
 	const toggleMenu = () =>{
 		setIsMenuOpen(!isMenuOpened);
+
+	}
+
+	const closeMenu = ()=>{
+		setIsMenuOpen(false);
 	}
 
 	console.log("rerender");
@@ -26,14 +32,14 @@ const Header = () => {
 
 				<Link to="/book" className={css.bookBtn}>Book</Link>
 
-				<div className={css.hamburgerIcon} onClick={toggleMenu}>
+				<div className={`${css.hamburgerIcon} ${isMenuOpened ? css.opened : ''}`} onClick={toggleMenu}>
 					<div className={css.bar}></div>
 					<div className={css.bar}></div>
 					<div className={css.bar}></div>
 				</div>
 				
 				{isMenuOpened &&(
-					<ul className={css.openedMenu}>
+					<ul className={css.openedMenu} onClick={closeMenu}>
 						<li><Link to="/profile">Profile</Link></li>
 						<li><Link to="/about">About</Link></li>
 						<li><Link to="/login">Sign in</Link></li>
@@ -42,6 +48,8 @@ const Header = () => {
 				)
 
 				}
+
+				
 			</nav>
 		</header>
    )

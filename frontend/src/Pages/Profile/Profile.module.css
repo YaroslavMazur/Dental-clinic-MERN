@@ -24,7 +24,13 @@
     border-radius: 5px;
 }
 .profileInfo *:not(:last-child) {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
+}
+
+.btn{
+    padding: 5px 10px;
+    font-size: 15px;
+    border: none;
 }
 
 .ordersContainer{

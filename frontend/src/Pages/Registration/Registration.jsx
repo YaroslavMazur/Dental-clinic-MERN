@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import GoogleLogin from "../../components/GoogleLogin/GoogleLogin";
 import { useForm, setValue } from "react-hook-form";
 import css from "../Login/Login.module.css";
 import { Link, useNavigate } from "react-router-dom";
@@ -29,12 +30,9 @@ export const Registration = () => {
       resultAction.payload.errors.forEach((err) => {
         setError(err.path, { type: "server validation", message: err.msg });
       });
-    }
-
-    else{
+    } else {
       navigate("/");
     }
-    
   };
 
   return (
@@ -95,7 +93,10 @@ export const Registration = () => {
         </div>
 
         <button type="submit">Sign up</button>
+        <GoogleLogin />
       </form>
+
+
     </div>
   );
 };

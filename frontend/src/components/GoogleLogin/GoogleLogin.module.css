@@ -1,0 +1,20 @@
+.containerHref{
+    text-decoration: none;
+    color: var(--color-main-white);
+    margin: 10px auto 5px auto;
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    /* border: 2px dashed var(--color-main-white);
+    padding: 5px 10px; */
+    border-radius: 5px;
+
+}
+
+.containerHref img{
+
+    height: 20px;
+}
+.containerHref p{
+    font-size: 15px;
+}

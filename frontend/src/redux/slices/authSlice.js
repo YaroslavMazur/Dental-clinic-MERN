@@ -15,14 +15,14 @@ export const registerUser = createAsyncThunk("auth/registerUser", async (userDat
         localStorage.setItem("token", response.data.accessToken);
         return response.data;
 
-    }  catch (error) {
+    } catch (error) {
         console.log(error)
-        throw rejectWithValue(error.response.data);      
+        throw rejectWithValue(error.response.data);
     }
-    }
+}
 );
 
-export const loginUser = createAsyncThunk("auth/loginUser", async (userData, {rejectWithValue}) => {
+export const loginUser = createAsyncThunk("auth/loginUser", async (userData, { rejectWithValue }) => {
     try {
         const response = await AuthService.login(
             userData.email,
@@ -32,43 +32,43 @@ export const loginUser = createAsyncThunk("auth/loginUser", async (userData, {re
         localStorage.setItem("token", response.data.accessToken);
         return response.data;
 
-    }  catch (error) {
+    } catch (error) {
         console.log(error);
-        throw rejectWithValue(error.response.data);      
+        throw rejectWithValue(error.response.data);
 
     }
-    }
+}
 );
 
-export const logoutUser = createAsyncThunk("auth/logoutUser", async (userData, {rejectWithValue}) => {
+export const logoutUser = createAsyncThunk("auth/logoutUser", async (userData, { rejectWithValue }) => {
     try {
         const response = await AuthService.logout()
 
         localStorage.removeItem("token");
         return response.data;
 
-    }  catch (error) {
+    } catch (error) {
 
         console.log("login ERROR", error);
-        throw rejectWithValue(error.response.data);      
+        throw rejectWithValue(error.response.data);
 
     }
-    }
+}
 );
 
 export const checkAuth = createAsyncThunk("auth/checkAuth", async () => {
     try {
-        const response = await axios.get(`${API_URL}/refresh`, {withCredentials:true});
+        const response = await axios.get(`${API_URL}/refresh`, { withCredentials: true });
         localStorage.setItem("token", response.data.accessToken);
 
         return response.data;
 
-    }  catch (error) {
+    } catch (error) {
 
         console.log("checkauth ERROR", error);
 
     }
-    }
+}
 );
 
 const initialState = {
@@ -132,21 +132,21 @@ const authSlice = createSlice({
             .addCase(checkAuth.rejected, (state) => {
                 state.userData = null;
                 state.isAuth = null;
-            });
+            })
+
     },
 
 })
 export const selectIsAuth = (state) => Boolean(state.auth.isAuth);
 export const selectIsMailActivated = (state) => {
     const userData = state.auth.userData;
-    if(!userData) return false;
+    if (!userData) return false;
 
     return userData.user.isActivated;
 }
 
-export const selectUserData = (state) => state.auth.userData;
+export const selectUserData = (state) => state.auth.userData?.user;
 
 
 export const authReducer = authSlice.reducer;
 
-export const { login, logout } = authSlice.actions;

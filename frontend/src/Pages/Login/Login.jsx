@@ -4,6 +4,7 @@ import css from "./Login.module.css";
 import {useNavigate} from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { loginUser } from '../../redux/slices/authSlice';
+import GoogleLogin from '../../components/GoogleLogin/GoogleLogin';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -60,6 +61,7 @@ const Login = () => {
               </div>
 
               <button type="submit">Log In</button>
+              <GoogleLogin/>
           </form>
         </div>
   );

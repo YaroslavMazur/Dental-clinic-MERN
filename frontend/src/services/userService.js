@@ -4,4 +4,8 @@ export default class UserService{
     static async fetchUsers(){
         return $api.get("/users");
     }
+
+    static async fetchUser(id){
+        return $api.get(`/userData/${id}`);
+    }
 }

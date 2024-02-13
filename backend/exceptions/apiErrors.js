@@ -24,5 +24,9 @@ module.exports = class ApiErrors extends Error{
     static LoginError(){
         return new ApiErrors(400, "Wrong email or password",[{path:"password", msg:"Wrong email or password"}]);
     }
+
+    static AccessDenied(){
+        return new ApiErrors(403, "Access denied");
+    }
     
 }
