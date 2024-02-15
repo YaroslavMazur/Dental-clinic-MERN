@@ -6,9 +6,9 @@ class appointmentController{
     async addAppointment(req, res, next){
         try{
             console.log(req);
-            const {userId, doctorId, appointmentDate, typeId} = req.body;
+            const {userId, doctorId, appointmentDate} = req.body;
 
-            const appointmentData = await appointmentService.addAppointment(userId, doctorId, typeId, appointmentDate);
+            const appointmentData = await appointmentService.addAppointment(userId, doctorId, appointmentDate);
             const user = await userModel.findOne({_id:userId});
             const doctor = await userModel.findOne({_id:doctorId});
 

@@ -3,7 +3,6 @@ const {google} = require('googleapis');
 
 const appointmentModel = require("../models/appointmentModel");
 
-const key = JSON.parse(process.env.GOOGLE_SERVICE_KEY);
 
 const calendar = google.calendar({
   version: 'v3',
@@ -15,21 +14,21 @@ const calendar = google.calendar({
 
 class appointmentServise {
 
-    async addAppointment(userId, doctorId, typeId, appointmenDate) {
+    async addAppointment(userId, doctorId, appointmenDate) {
 
-        const newAppointment = await appointmentModel.create({ userId, doctorId, typeId, appointmenDate });
+        const newAppointment = await appointmentModel.create({ userId, doctorId, appointmenDate });
 
         return newAppointment;
     }
 
-    async createEvent(calendarId, appointmenDate) {
+    async createEvent(appointmenDate) {
         try {
             const startDate = new Date();
             const endDate = new Date(startDate)
             endDate.setHours(startDate.setHours() + 3);
 
             const response = await calendar.events.insert({
-                calendarId: calendarId,
+                calendarId: "primary",
                 requestBody: {
                     summary: 'Запис до лікаря', // назва події
                     description: 'Консультація з лікарем', // опис події

@@ -14,20 +14,29 @@ class tokenService{
         }
     }
 
-    async saveToken(userId, refreshToken){
-        const tokenData = await tokenModel.findOne({user:userId});
+    async saveToken(userId, refreshToken ,googleRefreshToken){
+        try {
 
-        if(tokenData){
-            tokenData.refreshToken = refreshToken;
-            return tokenData.save();
+            const tokenData = await tokenModel.findOne({ user: userId });
+    
+            if (tokenData) {
+                tokenData.refreshToken = refreshToken;
+                if (googleRefreshToken !== undefined) { // Змінено умову тут
+                    tokenData.googleRefreshToken = googleRefreshToken;
+                }
+                return tokenData.save();
+            }
+    
+            const token = await tokenModel.create({ user: userId, refreshToken, googleRefreshToken });
+            return token;
+        } catch (error) {
+            // Обробка помилок бази даних
+            console.error("Помилка при збереженні токену:", error);
+            throw error;
         }
-
-        const token = await tokenModel.create({user:userId, refreshToken});
-        return token;
-
     }
 
-    async removeToken(refreshToken){
+    async  removeToken(refreshToken){
         const tokenData = await tokenModel.deleteOne({refreshToken});
         return tokenData;
     }

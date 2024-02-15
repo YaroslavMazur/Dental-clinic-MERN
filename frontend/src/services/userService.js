@@ -8,4 +8,7 @@ export default class UserService{
     static async fetchUser(id){
         return $api.get(`/userData/${id}`);
     }
+    static async fetchAllDoctors(){
+        return $api.get("/doctors");
+    }
 }

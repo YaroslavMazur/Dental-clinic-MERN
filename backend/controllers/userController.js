@@ -54,7 +54,11 @@ class userController {
 
         const url = oauth2Client.generateAuthUrl({
             access_type: 'offline',
-            scope: ['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email'],
+            scope: [
+                'https://www.googleapis.com/auth/userinfo.profile',
+                'https://www.googleapis.com/auth/userinfo.email',
+                'https://www.googleapis.com/auth/calendar'
+            ],
         });
         console.log(url);
 
@@ -72,14 +76,14 @@ class userController {
             );
 
             const { tokens } = await oauth2Client.getToken(code);
+            console.log(tokens);
             oauth2Client.setCredentials(tokens);
 
             const userInfoFromGoogle = await google.oauth2('v2').userinfo.get({ auth: oauth2Client });
 
-            const userData = await userService.findOrCreateUserFromGoogle(userInfoFromGoogle.data);
+            const userData = await userService.findOrCreateUserFromGoogle(userInfoFromGoogle.data, tokens.refresh_token);
 
             res.cookie("refreshToken", userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true });
-            console.log(res);
 
             res.redirect(`${process.env.CLIENT_URL}`);
 
@@ -159,6 +163,17 @@ class userController {
         }
 
     }
+
+    async getAllDoctors(req, res, next){
+        try{
+            const doctors = await userService.getAllDoctors();
+            return res.json(doctors);
+            
+        }catch(err){
+            next(err);
+        }
+    }
+
 }
 
 module.exports = new userController();

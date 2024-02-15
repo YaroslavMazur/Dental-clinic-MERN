@@ -30,7 +30,7 @@ const Header = () => {
 					<li><Link to="/registration">Sign up</Link></li>
 				</ul>
 
-				<Link to="/book" className={css.bookBtn}>Book</Link>
+				<Link to="/appointmant" className={css.bookBtn}>Book</Link>
 
 				<div className={`${css.hamburgerIcon} ${isMenuOpened ? css.opened : ''}`} onClick={toggleMenu}>
 					<div className={css.bar}></div>

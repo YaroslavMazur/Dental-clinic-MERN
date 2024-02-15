@@ -6,6 +6,7 @@ import {Main} from "./Pages/Main/Main.jsx";
 import Login from "./Pages/Login/Login.jsx";
 import {Registration} from './Pages/Registration/Registration.jsx';
 import { Profile } from './Pages/Profile/Profile.jsx';
+import AppointmantPage from "./Pages/AppointmantPage/AppointmantPage"
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { checkAuth, selectIsAuth , selectIsMailActivated} from './redux/slices/authSlice.js';
@@ -47,6 +48,7 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route path="/login" element={<Login />} />
               <Route path="/registration" element={<Registration />} />
+              <Route path="/appointmant" element={<AppointmantPage/>} />
             </Routes>
             <Footer/>
           </>

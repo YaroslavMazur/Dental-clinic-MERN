@@ -11,6 +11,11 @@ const TokenSchema = new Schema({
     refreshToken:{
         type:String,
         required:true,
+    },
+
+    googleRefreshToken:{
+        type:String,
+        deafult:null,
     }
 
 })

@@ -95,8 +95,11 @@ class userService {
             const userDTO = new UserDTO(user);
             const tokens = tokenService.generateTokens({ ...userDTO });
 
-            await tokenService.saveToken(userDTO.id, tokens.refreshToken);
-
+            if (tokenFromDB.googleRefreshToken) {
+                await tokenService.saveToken(userDTO.id, tokens.refreshToken, tokenFromDB.googleRefreshToken);
+            } else {
+                await tokenService.saveToken(userDTO.id, tokens.refreshToken);
+            }
             return { ...tokens, user: userDTO };
         }
         catch (err) {
@@ -122,7 +125,10 @@ class userService {
         return user;
     }
 
-    async findOrCreateUserFromGoogle(data) {
+    async findOrCreateUserFromGoogle(data, googleRefreshToken) {
+
+        console.log("findOrCreate user",googleRefreshToken)
+
 
         const user = await userModel.findOne({ email: data.email });
 
@@ -131,15 +137,27 @@ class userService {
             const newPassword = uuid.v4();
 
             const userData = await this.registration( data.email, newPassword, null, data.name )
+            return userData;
         }
 
         const userDTO = new UserDTO(user);
         const serverTokens = tokenService.generateTokens({ ...userDTO });
 
-        await tokenService.saveToken(userDTO.id, serverTokens.refreshToken);
+        await tokenService.saveToken(userDTO.id, serverTokens.refreshToken, googleRefreshToken);
 
         return { ...serverTokens, user: userDTO };
 
+    }
+
+    async getAllDoctors(){
+        const doctors = await userModel.find({role:"doctor"});
+        // додати перевірку чи є в googleRefreshToken
+
+        const doctorsData = doctors.map((doctor)=>{
+            return doctor = new UserDTO(doctor);
+        })
+
+        return doctorsData;
     }
 
 }
