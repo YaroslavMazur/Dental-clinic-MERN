@@ -1,15 +1,20 @@
 require("dotenv").config();
-const {google} = require('googleapis');
+const { google } = require('googleapis');
+const OAuth2 = google.auth.OAuth2;
+
 
 const appointmentModel = require("../models/appointmentModel");
+const tokenModel = require("../models/tokenModel");
 
+const oauth2Client = new OAuth2(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    process.env.REDIRECT_URL
+);
 
 const calendar = google.calendar({
-  version: 'v3',
-  auth: new google.auth.GoogleAuth({
-    credentials: key,
-    scopes: ['https://www.googleapis.com/auth/calendar'],
-  }),
+    version: 'v3',
+    auth: oauth2Client,
 });
 
 class appointmentServise {
@@ -21,25 +26,34 @@ class appointmentServise {
         return newAppointment;
     }
 
-    async createEvent(appointmenDate) {
+    async createEvent(appointmenDate, doctor, user, description) {
         try {
             const startDate = new Date();
-            const endDate = new Date(startDate)
-            endDate.setHours(startDate.setHours() + 3);
+            const endDate = new Date(startDate);
+            endDate.setHours(startDate.getHours() + 1);
+
+            const tokensFromDB = await tokenModel.findOne({user:doctor.id});
+            oauth2Client.setCredentials({refresh_token:tokensFromDB.googleRefreshToken});
 
             const response = await calendar.events.insert({
                 calendarId: "primary",
                 requestBody: {
-                    summary: 'Запис до лікаря', // назва події
-                    description: 'Консультація з лікарем', // опис події
+                    summary: 'Запис до лікаря' , 
+                    description: description, 
                     start: {
-                        dateTime: startDate.toISOString(), // початок події
-                        timeZone: 'Europe/Kiev', // часовий пояс
+                        dateTime: startDate.toISOString(), 
+                        timeZone: 'Europe/Kiev', 
                     },
                     end: {
-                        dateTime: endDate.toISOString(), // кінець події
-                        timeZone: 'Europe/Kiev', // часовий пояс
+                        dateTime: endDate.toISOString(), 
+                        timeZone: 'Europe/Kiev', 
                     },
+
+                    attendees:[
+                        {email:doctor.email},
+                        {email:user.email},
+                    ],
+                    sendNotifications: true
                 },
             });
             console.log('Подія була успішно створена:', response.data.htmlLink);
@@ -50,11 +64,6 @@ class appointmentServise {
     }
 
 
-    //   // Створення події у календарі користувача
-    //   createEvent(userEmailAddress, eventDetails);
-
-    //   // Створення події у календарі лікаря
-    //   createEvent(doctorEmailAddress, eventDetails);
 
 }
 

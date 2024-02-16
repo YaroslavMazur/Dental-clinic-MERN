@@ -5,15 +5,13 @@ const appointmentService = require("../service/appointmentService");
 class appointmentController{
     async addAppointment(req, res, next){
         try{
-            console.log(req);
-            const {userId, doctorId, appointmentDate} = req.body;
+            console.log(req.body);
+            const {user, doctor, date, description} = req.body;
 
-            const appointmentData = await appointmentService.addAppointment(userId, doctorId, appointmentDate);
-            const user = await userModel.findOne({_id:userId});
-            const doctor = await userModel.findOne({_id:doctorId});
+            const appointmentData = await appointmentService.addAppointment(user.id, doctor.id, date);
 
-            appointmentService.createEvent(user.email, new Date());
-            appointmentService.createEvent(doctor.email, new Date()); //заглушка
+            appointmentService.createEvent(date, doctor, user, description); 
+
 
             res.json(appointmentData);
            

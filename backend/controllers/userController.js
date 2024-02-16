@@ -7,6 +7,11 @@ const userService = require("../service/userService");
 const { validationResult } = require("express-validator");
 const userModel = require("../models/userModel");
 
+const oauth2Client = new OAuth2(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    process.env.REDIRECT_URL
+);
 
 
 class userController {
@@ -46,11 +51,7 @@ class userController {
     }
 
     async googleAuthorization(req, res) {
-        const oauth2Client = new OAuth2(
-            process.env.GOOGLE_CLIENT_ID,
-            process.env.GOOGLE_CLIENT_SECRET,
-            process.env.REDIRECT_URL
-        );
+        
 
         const url = oauth2Client.generateAuthUrl({
             access_type: 'offline',
@@ -69,12 +70,6 @@ class userController {
         try {
             const { code } = req.query;
 
-            const oauth2Client = new OAuth2(
-                process.env.GOOGLE_CLIENT_ID,
-                process.env.GOOGLE_CLIENT_SECRET,
-                process.env.REDIRECT_URL
-            );
-
             const { tokens } = await oauth2Client.getToken(code);
             console.log(tokens);
             oauth2Client.setCredentials(tokens);
@@ -86,10 +81,12 @@ class userController {
             res.cookie("refreshToken", userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true });
 
             res.redirect(`${process.env.CLIENT_URL}`);
-
+            
             // return res.json(userData);
         } catch (err) {
             console.error(err);
+
+        
         }
 
 

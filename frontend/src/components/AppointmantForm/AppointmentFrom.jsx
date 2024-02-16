@@ -1,13 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { selectUserData } from "../../redux/slices/authSlice";
 import UserService from "../../services/userService";
+import AppointmantService from "../../services/appointmantService";
+
 import css from "./AppointmantForm.module.css";
+import { addNewAppointmant } from "../../redux/slices/appointmantSlice";
+
 
 const AppointmantForm = () => {
-  const [form1Data, setForm1Data] = useState({});
-  const [form2Data, setForm2Data] = useState({});
+
+  const dispatch = useDispatch();
   const [formStage, setFormStage] = useState(1);
+  const user = useSelector(selectUserData)
 
   const [doctors, setDoctors] = useState([]);
 
@@ -21,7 +27,6 @@ const AppointmantForm = () => {
     const fetchDoctors = async () => {
       try {
         const response = await UserService.fetchAllDoctors();
-        console.log(response);
         setDoctors(response.data);
       } catch (error) {
         console.error(error);
@@ -31,22 +36,31 @@ const AppointmantForm = () => {
   }, []);
 
   const onSubmitForm1 = (data) => {
-    setForm1Data(data);
-    console.log(form1Data);
+
     if (isValid) {
       setFormStage(2);
     }
   };
 
-  const onSubmitForm2 = (data) => {
-    setForm2Data(data);
+  const onSubmitForm2 = async (data) => {
 
-    const formsData = {...form1Data, ...form2Data};
 
-    console.log(formsData)
+    const {doctorRadioOption, ...formData} = data;
+
+
+    const doctor = JSON.parse(doctorRadioOption);
+
+    const appointmantData = {...formData, user, doctor};
+    console.log(appointmantData)
+
+    const response = await dispatch(addNewAppointmant(appointmantData))
+
+
+
+    console.log(appointmantData);
   };
 
-  const handleChangeData = (e)=>{
+  const handleChangeDate = (e)=>{
     console.log(e.target.value);
 
   }
@@ -69,18 +83,20 @@ const AppointmantForm = () => {
           </div>
 
           <div className={css.inputContainer}>
-            <label htmlFor="description">description</label>
+            <label htmlFor="doctorRadioOption">Choose a doctor</label>
 
             {doctors.map((doctor) => {
               return (
-                <label>
+                <label key={doctor.id}>
                   <input
                     type="radio"
                     name="doctorRadioOption"
-                    value={doctor.id}
+                    value={JSON.stringify(doctor)}
                     {...register("doctorRadioOption", {
                       required: "Please choose a doctor",
                     })}
+
+                    onChange={handleChangeDate}
                   />
                   {doctor.name}
                 </label>
@@ -99,19 +115,17 @@ const AppointmantForm = () => {
           <h2>Make an appointmant 2 of 2</h2>
           <button onClick={() => setFormStage(1)}>Back</button>
 
-          <div className={css.inputContainer}>
+          <div className={css.inputContainer} >
             <label htmlFor="date">Date</label>
             <input
               type="date"
               id="date"
-              placeholder="date"
               min={new Date().toISOString().split("T")[0]}
               {...register("date", { required: "*Date is required" })}
-              onChange={handleChangeData}
+              onChange={handleChangeDate}
             />
             {errors.date && <p className={css.error}>{errors.date.message}</p>}
           </div>
-          <p className="p">{form1Data.date}</p>
 
           <button type="submit">Make an appointmant</button>
         </form>

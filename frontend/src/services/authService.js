@@ -14,7 +14,4 @@ export default class AuthService{
         return $api.post("/logout");
     } 
     
-    static googleAuth(){
-        return $api.get("/auth/google")
-    }
 }
