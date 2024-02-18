@@ -127,9 +127,6 @@ class userService {
 
     async findOrCreateUserFromGoogle(data, googleRefreshToken) {
 
-        console.log("findOrCreate user",googleRefreshToken)
-
-
         const user = await userModel.findOne({ email: data.email });
 
         if (!user) {

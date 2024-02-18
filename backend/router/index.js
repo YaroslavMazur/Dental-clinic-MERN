@@ -28,5 +28,7 @@ router.get("/doctors", authMiddlware, UserController.getAllDoctors);
 router.get("/userData/:id", authMiddlware, UserController.getUser);
 
 router.post("/addAppointment", authMiddlware, AppointmentController.addAppointment)
+router.get("/getAvaliableHours", authMiddlware, AppointmentController.getAvaliableHours)
+
 
 module.exports = router;

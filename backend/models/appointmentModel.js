@@ -19,6 +19,10 @@ const AppointmenSchema = new Schema({
     //     type:Schema.Types.ObjectId,
     //     ref:"ServiceType",
     // },
+    description:{
+        type: String,
+
+    },
 
     appointmenDate:{
         required:true,

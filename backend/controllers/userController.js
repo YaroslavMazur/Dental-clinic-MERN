@@ -105,6 +105,7 @@ class userController {
 
         }
         catch (err) {
+            next(err);
 
         }
     }

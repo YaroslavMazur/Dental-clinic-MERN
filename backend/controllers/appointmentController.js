@@ -2,27 +2,40 @@ const ApiErrors = require("../exceptions/apiErrors");
 const userModel = require("../models/userModel");
 const appointmentService = require("../service/appointmentService");
 
-class appointmentController{
-    async addAppointment(req, res, next){
-        try{
+class appointmentController {
+    async addAppointment(req, res, next) {
+        try {
             console.log(req.body);
-            const {user, doctor, date, description} = req.body;
+            const { userId, doctorId, date, time, description } = req.body;
+            const appointmentDataDB = await appointmentService.addAppointment(userId, doctorId, time, description);
 
-            const appointmentData = await appointmentService.addAppointment(user.id, doctor.id, date);
-
-            appointmentService.createEvent(date, doctor, user, description); 
+            appointmentService.createEvent(time, doctorId, userId, description);
 
 
-            res.json(appointmentData);
-           
+            res.json(appointmentDataDB);
+
         }
-        catch(err){
+        catch (err) {
 
             next(err);
         }
+
+    }
+    async getAvaliableHours(req, res, next){
+        try {
+            const {doctorId, date} = req.query;
+            const avaliableHours = await appointmentService.getAvaliableHours(doctorId, date);
+
+            console.log(avaliableHours)
+            res.json(avaliableHours);
+
+        } catch (err) {
+            console.log("Get avaliable hours error", err)
+            next(err)
+        }
     }
 
-    
+
 }
 
 module.exports = new appointmentController();

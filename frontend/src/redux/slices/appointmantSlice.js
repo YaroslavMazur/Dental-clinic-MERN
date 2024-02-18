@@ -17,6 +17,21 @@ export const addNewAppointmant = createAsyncThunk("appointmant/addNew", async (d
 }
 );
 
+export const getAvaliableHours = createAsyncThunk("appointmant/getAvaliableHours", async (data, { rejectWithValue }) => {
+    try {
+
+        console.log("data", data);
+        const response = await AppointmantService.getAvaliableHours(data.doctorId, data.date);
+
+        return response.data;
+
+    } catch (error) {
+        console.log(error)
+        throw rejectWithValue(error.response.error);
+    }
+}
+);
+
 
 const initialState = {
     isLoading:false,
@@ -42,6 +57,21 @@ const appointmantSlice = createSlice({
 
             })
             .addCase(addNewAppointmant.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            })
+
+            .addCase(getAvaliableHours.pending, (state) => {
+                state.isLoading = true;
+                state.error = null; 
+
+            })
+            .addCase(getAvaliableHours.fulfilled, (state) => {
+                state.isLoading = false;
+                state.error = null;
+
+            })
+            .addCase(getAvaliableHours.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload;
             })

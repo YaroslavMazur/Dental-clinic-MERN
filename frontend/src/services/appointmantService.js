@@ -5,4 +5,8 @@ export default class AppointmantService{
         return $api.post("/addAppointment", data);
     }
 
+    static async getAvaliableHours(doctorId, date){
+        return $api.get(`/getAvaliableHours?doctorId=${doctorId}&date=${date}`);
+    }
+
 }
