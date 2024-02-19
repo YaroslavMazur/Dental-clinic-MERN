@@ -33,6 +33,7 @@
         try {
           const response = await UserService.fetchAllDoctors();
           setDoctors(response.data);
+          console.log(response);
           console.log("doctors", doctors);
         } catch (error) {
           console.error(error);
@@ -96,7 +97,9 @@
             <div className={css.inputContainer}>
               <label htmlFor="doctorId">Choose a doctor</label>
 
-              {doctors.map((doctor) => {
+              {doctors.length === 0? (<p>Loaging</p>):
+              
+              doctors.map((doctor) => {
                 return (
                   <label key={doctor.id}>
                     <input

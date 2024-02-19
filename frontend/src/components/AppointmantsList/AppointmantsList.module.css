@@ -1,0 +1,20 @@
+.appointmantsContainer{
+    width: 70%;
+    background-color: var(--color-main-blue);
+    border-radius: 10px;
+    padding: 20px;
+    color:var(--color-main-white);
+}
+
+.appointmantItem{
+    background-color: var(--color-main-white);
+    color: var(--color-main-black);
+    border-radius: 5px;
+    padding: 20px;
+    
+}
+
+.appointmantItem:not(:last-child){
+    margin-bottom: 20px;
+    
+}

@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { selectUserData, logoutUser, selectIsAuth } from "../../redux/slices/authSlice";
 import css from "./Profile.module.css";
 import UserService from "../../services/userService";
+import AppointmantsList from "../../components/AppointmantsList/AppointmantsList";
 
 export const Profile = ()=>{
     
@@ -26,6 +27,7 @@ export const Profile = ()=>{
             const { data } = await UserService.fetchUser(userDataRedux.id);
               setUser(data);
             }
+            console.log(user);
           } catch (error) {
             console.error("Error fetching user data:", error);
           }
@@ -51,10 +53,7 @@ export const Profile = ()=>{
                 <p>{user.phoneNumber}</p>
                 <button onClick={handleLogout} className={css.btn}>Logout</button> 
             </div>
-
-            <div className={css.ordersContainer}>
-
-            </div>
+            <AppointmantsList userId={userDataRedux.id}/>
         </div>
     )
 }

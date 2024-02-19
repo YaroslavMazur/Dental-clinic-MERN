@@ -24,7 +24,7 @@ const AppointmenSchema = new Schema({
 
     },
 
-    appointmenDate:{
+    appointmentDate:{
         required:true,
         type:Date,
     },

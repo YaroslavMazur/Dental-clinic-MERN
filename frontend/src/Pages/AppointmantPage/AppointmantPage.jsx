@@ -1,5 +1,5 @@
 import react from "react";
-import AppointmantForm from "../../components/AppointmantForm/AppointmentFrom";
+import AppointmantForm from "../../components/AppointmantForm/AppointmentForm";
 import css from "./AppointmantPage.module.css";
 
 const AppointmantPage = ()=>{

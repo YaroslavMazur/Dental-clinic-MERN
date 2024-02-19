@@ -32,6 +32,21 @@ export const getAvaliableHours = createAsyncThunk("appointmant/getAvaliableHours
 }
 );
 
+export const getAllAppointmants = createAsyncThunk("appointmant/getAllAppointmants", async (userId, { rejectWithValue }) => {
+    try {
+
+        console.log("userId", userId);
+        const response = await AppointmantService.getAllAppointmants(userId);
+
+        return response.data;
+
+    } catch (error) {
+        console.log(error)
+        throw rejectWithValue(error.response.error);
+    }
+}
+);
+
 
 const initialState = {
     isLoading:false,
@@ -76,11 +91,26 @@ const appointmantSlice = createSlice({
                 state.error = action.payload;
             })
 
+            .addCase(getAllAppointmants.pending, (state) => {
+                state.isLoading = true;
+                state.error = null; 
+
+            })
+            .addCase(getAllAppointmants.fulfilled, (state) => {
+                state.isLoading = false;
+                state.error = null;
+
+            })
+            .addCase(getAllAppointmants.rejected, (state, action) => {
+                state.isLoading = false;
+                state.error = action.payload;
+            })
+
 
     },
 
 })
-export const selectIsLoading = (state) => Boolean(state.auth.isLoading);
+export const selectIsLoading = (state) => Boolean(state.appointmant.isLoading);
 
 
 export const appointmantReducer = appointmantSlice.reducer;

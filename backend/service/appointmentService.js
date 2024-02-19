@@ -7,6 +7,10 @@ const appointmentModel = require("../models/appointmentModel");
 const tokenModel = require("../models/tokenModel");
 const userService = require("./userService");
 const userModel = require("../models/userModel");
+const ApiErrors = require("../exceptions/apiErrors");
+const UserDTO = require("../dtos/userDTO");
+
+
 
 const oauth2Client = new OAuth2(
     process.env.GOOGLE_CLIENT_ID,
@@ -38,8 +42,14 @@ class appointmentServise {
         const endDate = new Date(startDate);
         endDate.setHours(startDate.getHours() + 1);
 
+
+
         const tokensFromDB = await tokenModel.findOne({ user: doctorId });
         oauth2Client.setCredentials({ refresh_token: tokensFromDB.googleRefreshToken });
+
+        if (!this.checkIfAvaliableHour(appointmenDate, endDate, tokensFromDB.googleRefreshToken)) {
+            throw ApiErrors.BadRequest("This time is not avaliable", [{ path: "time", msg: "This time is not avaliable" }]);
+        }
 
         const response = await calendar.events.insert({
             calendarId: "primary",
@@ -83,7 +93,7 @@ class appointmentServise {
 
         const response = await calendar.freebusy.query({
             requestBody: {
-                timeMin: timeMin.toISOString(), // Перетворення в формат ISO
+                timeMin: timeMin.toISOString(),
                 timeMax: timeMax.toISOString(),
                 timeZone: 'UTC',
                 items: [
@@ -116,8 +126,8 @@ class appointmentServise {
                     });
 
                     currentTime = endTime;
-                // } else if (currentTime >= busyEnd) {
-                //     indexTime++;
+                    // } else if (currentTime >= busyEnd) {
+                    //     indexTime++;
                 } else {
                     currentTime = busyEnd;
                     indexTime++;
@@ -137,6 +147,47 @@ class appointmentServise {
         return freeTime;
 
 
+    }
+    async checkIfAvaliableHour(timeMin, timeMax, googleRefreshToken) {
+        timeMax = new Date(timeMax);
+        timeMin = new Date(timeMin);
+
+        oauth2Client.setCredentials({ refresh_token: googleRefreshToken });
+
+        const response = await calendar.freebusy.query({
+            requestBody: {
+                timeMin: timeMin.toISOString(),
+                timeMax: timeMax.toISOString(),
+                timeZone: 'UTC',
+                items: [
+                    { id: "primary" }
+                ]
+            }
+        })
+        const busyTime = response.data.calendars["primary"].busy;
+
+        if (busyTime.length !== 0) {
+            return false;
+        }
+
+        return true;
+    }
+
+    async getAllAppointmants(userId){
+
+        const appointmants = await appointmentModel.find({userId:userId}).populate("userId").populate("doctorId");
+
+        appointmants.forEach((appointmant)=>{
+
+            appointmant.userId = new UserDTO(appointmant.userId);
+            appointmant.doctorId = new UserDTO(appointmant.doctorId);
+            
+        })
+
+
+        console.log(appointmants);
+
+        return appointmants;
     }
 
 

@@ -8,5 +8,9 @@ export default class AppointmantService{
     static async getAvaliableHours(doctorId, date){
         return $api.get(`/getAvaliableHours?doctorId=${doctorId}&date=${date}`);
     }
+    static async getAllAppointmants(userId){
+        return $api.get(`/getAllAppointmants?userId=${userId}`);
+
+    }
 
 }

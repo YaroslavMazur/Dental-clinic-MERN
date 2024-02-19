@@ -5,6 +5,7 @@
     display: flex;
     justify-content: center;
     gap: 20px;
+    position: relative;
 
 
 }
@@ -16,6 +17,9 @@
     width: 30%;
     min-width: 300px;
     color: white;
+    position: sticky;
+    top:20px;
+    height: 100%;
 }
 
 .profileInfo img{
@@ -31,11 +35,4 @@
     padding: 5px 10px;
     font-size: 15px;
     border: none;
-}
-
-.ordersContainer{
-    height:200px;
-    width: 70%;
-    background-color: var(--color-main-blue);
-    border-radius: 10px;
 }

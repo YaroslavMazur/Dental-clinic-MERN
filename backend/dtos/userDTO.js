@@ -3,10 +3,10 @@ module.exports = class UserDTO{
     id;
     isActivated;
     role;
-    name;
+    fullName;
 
     constructor(model){
-        this.name = model.fullName;
+        this.fullName = model.fullName;
         this.email = model.email;
         this.id = model._id;
         this.role = model.role;
