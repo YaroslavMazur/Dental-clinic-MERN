@@ -6,6 +6,7 @@ const ApiErrors = require("../exceptions/apiErrors");
 const userService = require("../service/userService");
 const { validationResult } = require("express-validator");
 const userModel = require("../models/userModel");
+const mailService = require("../service/mailService");
 
 const oauth2Client = new OAuth2(
     process.env.GOOGLE_CLIENT_ID,
@@ -127,6 +128,7 @@ class userController {
         try {
 
             const { refreshToken } = req.cookies;
+            console.log("REFRESH", refreshToken);
             const userData = await userService.refresh(refreshToken);
 
             res.cookie("refreshToken", userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true });
@@ -169,6 +171,20 @@ class userController {
             
         }catch(err){
             next(err);
+        }
+    }
+
+    async sendQuestion(req, res, next){
+        try{
+            console.log(req.body)
+            const {name, question, email} = req.body;
+
+            const response = await mailService.sendQuestion(name, email, question);
+
+            return res.json(response);
+
+        }catch(err){
+            next(err)
         }
     }
 

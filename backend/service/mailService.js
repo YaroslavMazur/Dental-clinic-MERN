@@ -35,6 +35,28 @@ class mailService{
             console.log(err)
         }
     }
+
+    async sendQuestion(name, fromEmail, text){
+        try{
+
+            await this.transporter.sendMail({
+                from:process.env.SMTP_MAIL,
+                to: process.env.SMTP_MAIL,
+                subject: `Користувач ${name} задав питання`, 
+                text:"",
+                html:
+                `
+                    <div>
+                        <h1>Користувач: ${name} email: ${fromEmail} Задав питання:</h1>
+                        <p>${text}</p>
+                    </div>
+                `
+            })
+        }
+        catch(err){
+            console.log(err)
+        }
+    }
  
 
 }

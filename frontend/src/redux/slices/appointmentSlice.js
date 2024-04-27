@@ -2,11 +2,11 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import AuthService from "../../services/authService";
 import axios from "axios";
 import { API_URL } from "../../http";
-import AppointmantService from "../../services/appointmantService";
+import AppointmentService from "../../services/appointmentService";
 
-export const addNewAppointmant = createAsyncThunk("appointmant/addNew", async (data, { rejectWithValue }) => {
+export const addNewAppointment = createAsyncThunk("appointments/addNew", async (data, { rejectWithValue }) => {
     try {
-        const response = await AppointmantService.addNewAppointmant(data);
+        const response = await AppointmentService.addNewAppointment(data);
 
         return response.data;
 
@@ -17,11 +17,11 @@ export const addNewAppointmant = createAsyncThunk("appointmant/addNew", async (d
 }
 );
 
-export const getAvaliableHours = createAsyncThunk("appointmant/getAvaliableHours", async (data, { rejectWithValue }) => {
+export const getAvaliableHours = createAsyncThunk("appointments/getAvaliableHours", async (data, { rejectWithValue }) => {
     try {
 
         console.log("data", data);
-        const response = await AppointmantService.getAvaliableHours(data.doctorId, data.date);
+        const response = await AppointmentService.getAvaliableHours(data.doctorId, data.date);
 
         return response.data;
 
@@ -32,11 +32,11 @@ export const getAvaliableHours = createAsyncThunk("appointmant/getAvaliableHours
 }
 );
 
-export const getAllAppointmants = createAsyncThunk("appointmant/getAllAppointmants", async (userId, { rejectWithValue }) => {
+export const getAllAppointments = createAsyncThunk("appointments/getAllAppointments", async (userId, { rejectWithValue }) => {
     try {
 
         console.log("userId", userId);
-        const response = await AppointmantService.getAllAppointmants(userId);
+        const response = await AppointmentService.getAllAppointments(userId);
 
         return response.data;
 
@@ -53,25 +53,25 @@ const initialState = {
     error: null,
 }
 
-const appointmantSlice = createSlice({
-    name: "appointmant",
+const appointmentSlice = createSlice({
+    name: "appointments",
     initialState,
     reducers: {
     },
     extraReducers: (builder) => {
         builder
-            .addCase(addNewAppointmant.pending, (state) => {
+            .addCase(addNewAppointment.pending, (state) => {
                 state.isLoading = true;
                 state.error = null; 
 
             })
-            .addCase(addNewAppointmant.fulfilled, (state, action) => {
+            .addCase(addNewAppointment.fulfilled, (state, action) => {
                 console.log("payload", action.payload);
                 state.isLoading = false;
                 state.error = null;
 
             })
-            .addCase(addNewAppointmant.rejected, (state, action) => {
+            .addCase(addNewAppointment.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload;
             })
@@ -91,17 +91,17 @@ const appointmantSlice = createSlice({
                 state.error = action.payload;
             })
 
-            .addCase(getAllAppointmants.pending, (state) => {
+            .addCase(getAllAppointments.pending, (state) => {
                 state.isLoading = true;
                 state.error = null; 
 
             })
-            .addCase(getAllAppointmants.fulfilled, (state) => {
+            .addCase(getAllAppointments.fulfilled, (state) => {
                 state.isLoading = false;
                 state.error = null;
 
             })
-            .addCase(getAllAppointmants.rejected, (state, action) => {
+            .addCase(getAllAppointments.rejected, (state, action) => {
                 state.isLoading = false;
                 state.error = action.payload;
             })
@@ -110,8 +110,12 @@ const appointmantSlice = createSlice({
     },
 
 })
-export const selectIsLoading = (state) => Boolean(state.appointmant.isLoading);
+export const selectIsLoading = (state) => Boolean(state.appointments.isLoading);
+export const selectErrors = (state) => state.appointments.error;
+
+export const selectAppointmentsState = (state)=> state.appointments;
 
 
-export const appointmantReducer = appointmantSlice.reducer;
+
+export const appointmentReducer = appointmentSlice.reducer;
 

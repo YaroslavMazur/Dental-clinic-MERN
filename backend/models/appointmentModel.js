@@ -15,10 +15,6 @@ const AppointmenSchema = new Schema({
         ref:"User",
     },
     
-    // serviceTypeId:{
-    //     type:Schema.Types.ObjectId,
-    //     ref:"ServiceType",
-    // },
     description:{
         type: String,
 

@@ -11,4 +11,8 @@ export default class UserService{
     static async fetchAllDoctors(){
         return $api.get("/doctors");
     }
+
+    static sendQuestion(data){
+        return $api.post("/sendQuestion", data);
+    }
 }

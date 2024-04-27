@@ -18,7 +18,6 @@ $api.interceptors.response.use((config)=>{
 
 }, (async (error) =>{
 
-    // console.log("INTECEPTOR ERROR", error)
 
     if(error.response.status === 401 && error.config && !error.config._isRetry){
         try{
@@ -28,7 +27,7 @@ $api.interceptors.response.use((config)=>{
 
             return $api.request(error.config);
         }catch(err){
-            
+
             console.log("user not authorized", err);
         }
 

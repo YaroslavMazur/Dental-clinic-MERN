@@ -1,0 +1,6 @@
+.errorContainer{
+    position: absolute;
+    display: flex;
+    right: 20px;
+    bottom: 20px;
+}

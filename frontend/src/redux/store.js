@@ -1,11 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { authReducer } from "./slices/authSlice";
-import { appointmantReducer } from "./slices/appointmantSlice";
+import { appointmentReducer } from "./slices/appointmentSlice";
 
 const store = configureStore({
     reducer:{
         auth:authReducer,
-        appointmant:appointmantReducer,
+        appointments:appointmentReducer,
     },
 })
 

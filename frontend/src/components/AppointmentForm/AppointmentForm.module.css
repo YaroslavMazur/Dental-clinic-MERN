@@ -1,0 +1,49 @@
+.formsContainer{
+    display: flex;
+    background-color: var(--color-main-blue);
+    padding: 30px;
+    border-radius: 15px;
+    height: 100%;
+    color: white;
+}
+
+.formsContainer label{
+    display: block;
+}
+.formsContainer input{
+    padding: 7px 13px;
+    margin-top: 5px;
+    outline: none;
+    border: none;
+    border-radius: 25px;
+}
+
+.form > :not(:last-child){
+    margin-bottom: 20px;
+}
+
+.form button[type="submit"]{
+    display: inline;
+    margin: 0px auto 0px auto;
+    font-size: 1.15rem;
+    
+    color: var(--color-main-blue);
+    padding: 7px 7px;
+    font-weight: bold;
+    cursor: pointer;
+    width: 70%;
+    transition: 0.3s all ease-in-out;
+    border-radius: 5px;
+    border: 2px solid transparent;
+}
+
+.form button[type="submit"]:hover{
+    color: var(--color-main-white);
+    background-color: var(--color-main-blue);
+    border: 2px dashed var(--color-main-white);
+}
+.error{
+    opacity: 0.7;
+    margin-bottom: 20px;
+}
+

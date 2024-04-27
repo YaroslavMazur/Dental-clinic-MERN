@@ -2,6 +2,7 @@ import React ,{useState} from 'react';
 import css from "./Header.module.css";
 import PropTypes from 'prop-types';
 import {Link} from "react-router-dom";
+import Magnetic from "../../components/Magnetic/Magnetic"
 
 const Header = () => {
 	const [isMenuOpened, setIsMenuOpen] = useState(false);
@@ -29,8 +30,10 @@ const Header = () => {
 					<li><Link to="/login">Log in</Link></li>
 					<li><Link to="/registration">Sign up</Link></li>
 				</ul>
+				<Magnetic>
+					<Link to="/appointment" className={css.bookBtn}>Book a slot</Link>
 
-				<Link to="/appointmant" className={css.bookBtn}>Book</Link>
+				</Magnetic>
 
 				<div className={`${css.hamburgerIcon} ${isMenuOpened ? css.opened : ''}`} onClick={toggleMenu}>
 					<div className={css.bar}></div>
@@ -48,7 +51,7 @@ const Header = () => {
 				)
 
 				}
-
+				
 				
 			</nav>
 		</header>

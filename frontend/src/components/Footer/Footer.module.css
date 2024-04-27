@@ -3,14 +3,62 @@
     background-color: var(--color-main-blue);
     color: var(--color-main-white);
     display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    
+}
+.footerInfo{
+    display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
 }
+.contactInfoContainer > :not(:last-child){
+    margin-bottom: 20px;
+}
+
+.info *{
+    margin-bottom: 7px;
+}
+
+.socialLinks{
+    display: flex;
+    gap:10px;
+}
+
+.socialLinks a{
+    height: 30px;
+    width: 30px;
+}
+
+
 
 .column{
     min-height: 100px;
+    min-width: 200px;
     display: flex;
     flex-direction: column;
-    padding: 20px 0px
+    padding: 20px 0px;
+    width: 20%;
+    padding: 20px;
+    max-width: 25%;
 
+}
+.column a{
+    color: var(--color-main-white);
+    margin-bottom: 10px;
+}
+.column p{
+    font-size: 18px;
+}
+
+.footerInfo h3{
+    margin-bottom: 20px;
+
+}
+.footerText{
+    text-align: center;
+    padding: 0px 100px 20px 100px;
+    font-size: 13px;
+    opacity: 0.6;
 }
 

@@ -20,7 +20,7 @@ body {
 
 }
 
-::-webkit-scrollbar {
+/* ::-webkit-scrollbar {
   width: 10px;
 }
 
@@ -31,7 +31,7 @@ body {
 ::-webkit-scrollbar-thumb {
   background: var(--color-main-blue);
   border-radius: 5px; 
-}
+} */
 
 
 

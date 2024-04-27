@@ -35,17 +35,17 @@ class appointmentController {
         }
     }
 
-    async getAllAppointmants(req, res, next){
+    async getAllAppointments(req, res, next){
         try{
 
             const {userId} = req.query;
             
-            const allAppointmants = await appointmentService.getAllAppointmants(userId);
+            const allAppointments = await appointmentService.getAllAppointments(userId);
             
             console.log("QUERY", userId);
-            res.json(allAppointmants);
+            res.json(allAppointments);
         }catch(err){
-            console.log("Get all appointmants error", err)
+            console.log("Get all appointments error", err)
             next(err)
         }
 

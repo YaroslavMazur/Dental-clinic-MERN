@@ -28,6 +28,8 @@ app.use("/api", router);
 app.use(errorMiddlware);
 
 const PORT = process.env.PORT || 5000;
+
+
 const start = async () => {
     try {
 

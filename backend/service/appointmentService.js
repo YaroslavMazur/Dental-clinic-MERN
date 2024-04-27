@@ -25,20 +25,20 @@ const calendar = google.calendar({
 
 class appointmentServise {
 
-    async addAppointment(userId, doctorId, appointmenDate, description) {
+    async addAppointment(userId, doctorId, appointmentDate, description) {
 
-        const newAppointment = await appointmentModel.create({ userId, doctorId, appointmenDate, description });
+        const newAppointment = await appointmentModel.create({ userId, doctorId, appointmentDate, description });
 
         return newAppointment;
     }
 
-    async createEvent(appointmenDate, doctorId, userId, description) {
+    async createEvent(appointmentDate, doctorId, userId, description) {
 
         const user = await userModel.findOne({ _id: userId });
         const doctor = await userModel.findOne({ _id: doctorId });
 
 
-        const startDate = new Date(appointmenDate);
+        const startDate = new Date(appointmentDate);
         const endDate = new Date(startDate);
         endDate.setHours(startDate.getHours() + 1);
 
@@ -47,7 +47,7 @@ class appointmentServise {
         const tokensFromDB = await tokenModel.findOne({ user: doctorId });
         oauth2Client.setCredentials({ refresh_token: tokensFromDB.googleRefreshToken });
 
-        if (!this.checkIfAvaliableHour(appointmenDate, endDate, tokensFromDB.googleRefreshToken)) {
+        if (!this.checkIfAvaliableHour(appointmentDate, endDate, tokensFromDB.googleRefreshToken)) {
             throw ApiErrors.BadRequest("This time is not avaliable", [{ path: "time", msg: "This time is not avaliable" }]);
         }
 
@@ -126,8 +126,6 @@ class appointmentServise {
                     });
 
                     currentTime = endTime;
-                    // } else if (currentTime >= busyEnd) {
-                    //     indexTime++;
                 } else {
                     currentTime = busyEnd;
                     indexTime++;
@@ -148,6 +146,7 @@ class appointmentServise {
 
 
     }
+    
     async checkIfAvaliableHour(timeMin, timeMax, googleRefreshToken) {
         timeMax = new Date(timeMax);
         timeMin = new Date(timeMin);
@@ -173,21 +172,21 @@ class appointmentServise {
         return true;
     }
 
-    async getAllAppointmants(userId){
+    async getAllAppointments(userId){
 
-        const appointmants = await appointmentModel.find({userId:userId}).populate("userId").populate("doctorId");
+        const appointments = await appointmentModel.find({userId:userId}).populate("userId").populate("doctorId");
 
-        appointmants.forEach((appointmant)=>{
+        appointments.forEach((appointment)=>{
 
-            appointmant.userId = new UserDTO(appointmant.userId);
-            appointmant.doctorId = new UserDTO(appointmant.doctorId);
+            appointment.userId = new UserDTO(appointment.userId);
+            appointment.doctorId = new UserDTO(appointment.doctorId);
             
         })
 
 
-        console.log(appointmants);
+        console.log(appointments);
 
-        return appointmants;
+        return appointments;
     }
 
 

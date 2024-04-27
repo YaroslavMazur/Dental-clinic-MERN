@@ -20,16 +20,18 @@ router.get("/auth/google/callback", UserController.googleAuthorizationCallback);
 router.post("/login", UserController.login);
     
 router.post("/logout",UserController.logout);
-router.get("/activate/:link",UserController.activate);
-router.get("/refresh",UserController.refresh);
+router.get("/activate/:link", UserController.activate);
+
+router.get("/refresh", UserController.refresh);
 router.get("/users", authMiddlware, UserController.getUsers);
 router.get("/doctors", authMiddlware, UserController.getAllDoctors);
-
 router.get("/userData/:id", authMiddlware, UserController.getUser);
+
+router.post("/sendQuestion", UserController.sendQuestion);
 
 router.post("/addAppointment", authMiddlware, AppointmentController.addAppointment)
 router.get("/getAvaliableHours", authMiddlware, AppointmentController.getAvaliableHours)
-router.get("/getAllAppointmants", authMiddlware, AppointmentController.getAllAppointmants)
+router.get("/getAllAppointments", authMiddlware, AppointmentController.getAllAppointments)
 
 
 

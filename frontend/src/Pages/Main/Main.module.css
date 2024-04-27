@@ -1,6 +1,152 @@
 .mainContainer{
-    min-height: 80vh;
+    
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+}
+
+.leftBlock, .rightBlock{
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    margin: 60px 6%; 
+}
+
+.leftBlock{
+    flex-direction: column;
+    align-items: left;
+    justify-content: center;
+      
+}
+
+
+
+.rightBlock{
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    gap: 20px;
+    color: var(--color-main-white);
+}
+
+.staticText, .dynamicText{
+    font-size: 40px;
+    color: var(--color-main-blue);
+    
+}
+.staticText{
+    font-weight: 900;
+}
+
+
+.photoMain{
+    
+    width: 530px;
+    transition: all 1s ease-in-out;
+    animation: rotateMask 12s ease-in-out infinite;
+    box-shadow: 0 0 10px rgba(9, 0, 47, 0.3);
+}
+
+.block2{
+    height: 90vh;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    
+    background-color: var(--color-main-blue);
+}
+.block2 .rightBlock{
+    color: white;
+}
+
+.block2 .rightBlock p{
+    font-size: 17px;
+}
+
+.block2 img{
+    border-radius: 40px;
+    box-shadow: 2px white;
+    height: 100%;
+    box-shadow: 6px 6px 0px var(--color-main-blue),
+                9px 9px 0px var(--color-main-white);
+    
+}
+
+.block3{
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    padding: 40px 0px;
+    gap:20px;
+}
+
+.block4{
+    
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+    padding: 40px 5% ;
+    background-color: var(--color-main-blue);
+}
+
+
+
+
+@keyframes rotateMask {
+    0% {
+      border-radius: 60% 40% 30% 70%/60% 30% 70% 40%;
+    }
+    20% {
+      border-radius: 30% 60% 40% 50%/60% 30% 70% 40%;
+    }
+    70% {
+      border-radius: 50% 20% 60% 70%/20% 30% 50% 70%;
+    }
+    100% {
+      border-radius: 60% 40% 30% 70%/60% 30% 70% 40%;
+    }
+  }
+  
+
+.textBlock{
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.textBlock{
+    height: 80vh;
+}
+
+
+.callToActionBtn{
+
+    border: none;
+    outline: none;
+    font-size: 15px;
+    cursor: pointer;
+    padding: 10px 15px;
+    border-radius: 15px;
+    color: var(--color-main-white);
+    background-color: var(--color-main-blue);
+}
+
+.borders{
+    border: var(--border-blue);
+    background-color: transparent;
+    color: var(--color-main-blue);
+}
+
+.mainButtons{
+    display: flex;
+    gap:20px;
+}
+.regularText{
+    color: var(--color-main-blue);
+    margin: 20px 0px;
 }
